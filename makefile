@@ -2,7 +2,7 @@ up:
 	docker compose --env-file .env up airflow-init && docker compose --env-file .env up --build -d
 
 down:
-	docker compose --env-file .env down
+	docker compose --env-file .env down --volumes --rmi all
 
 # CI
 format:
