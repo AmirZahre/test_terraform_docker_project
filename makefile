@@ -1,5 +1,5 @@
 up:
-	docker compose --env-file .env up --build -d
+	docker compose --env-file .env up airflow-init && docker compose --env-file .env up --build -d
 
 down:
 	docker compose --env-file .env down
