@@ -1,9 +1,12 @@
 FROM apache/airflow:2.5.3
 # lets us import from folders inside /src/loader directly
 ENV PYTHONPATH=/opt/airflow
+WORKDIR /airflow
 
 COPY requirements.txt /
 RUN pip install --no-cache-dir -r /requirements.txt
+
+# ENTRYPOINT [ "/containers/scripts/entrypoint.sh" ]
 
 
 

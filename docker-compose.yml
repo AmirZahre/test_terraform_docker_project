@@ -68,6 +68,7 @@ x-airflow-common:
     - ./tests:/opt/airflow/tests
     - ./data:/opt/airflow/data
     - ./temp:/opt/airflow/temp
+    - ./containers:/opt/airflow/containers
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:
     &airflow-common-depends-on
@@ -160,7 +161,7 @@ services:
 
   airflow-init:
     <<: *airflow-common
-    # entrypoint: /bin/bash
+    # entrypoint: ["sh", "/opt/containers/airflow/scripts/entrypoint.sh"]
     # yamllint disable rule:line-length
     command: version
     environment:
@@ -172,6 +173,7 @@ services:
     user: "0:${AIRFLOW_GID:-0}"
     volumes:
       - .:/sources
+      # - ./containers/airflow/scripts:/opt/containers/airflow/scripts
 
   airflow-cli:
     <<: *airflow-common
