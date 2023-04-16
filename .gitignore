@@ -16,3 +16,6 @@ logs/*
 # .tfstate files
 *.tfstate
 *.tfstate.*
+
+
+.git
