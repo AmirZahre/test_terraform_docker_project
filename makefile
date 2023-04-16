@@ -1,10 +1,20 @@
-up:
+include .env
+
+####################################################################################################################
+# General setup of containers
+docker-spin-up:
 	docker compose --env-file .env up airflow-init && docker compose --env-file .env up --build -d
+
+perms:
+	sudo mkdir -p logs plugins temp dags tests migrations && sudo chmod -R u=rwx,g=rwx,o=rwx logs plugins temp dags tests migrations
+
+up: perms docker-spin-up
 
 down:
 	docker compose --env-file .env down --volumes --rmi all
 
-# CI
+####################################################################################################################
+# Testing, auto formatting, type checks, & Lint checks
 format:
 	docker exec loader python -m black -S --line-length 79 .
 
@@ -17,4 +27,22 @@ pytest:
 lint: 
 	docker exec loader flake8 /opt/sde
 
-ci: isort format lint pytest
+type:
+	docker exec webserver mypy --ignore-missing-imports /opt/airflow
+
+ci: isort format type lint pytest
+
+####################################################################################################################
+# Set up cloud infrastructure
+
+tf-init:
+	terraform -chdir=./terraform init
+
+infra-up:
+	terraform -chdir=./terraform apply
+
+infra-down:
+	terraform -chdir=./terraform destroy
+
+infra-config:
+	terraform -chdir=./terraform output
