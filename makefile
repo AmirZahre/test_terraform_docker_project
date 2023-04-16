@@ -46,3 +46,9 @@ infra-down:
 
 infra-config:
 	terraform -chdir=./terraform output
+
+infra-public:
+	terraform -chdir=./terraform output -raw ec2_public_dns
+
+infra-private:
+	terraform -chdir=./terraform output -raw private_key
