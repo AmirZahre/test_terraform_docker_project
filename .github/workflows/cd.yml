@@ -1,3 +1,4 @@
+# https://lightrains.com/blogs/deploy-aws-ec2-using-github-actions/
 name: CD
 on:
   push:
@@ -7,6 +8,9 @@ jobs:
   deploy-to-ec2:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout the files
+        uses: actions/checkout@v2
+
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@main
         env:
