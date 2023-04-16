@@ -27,19 +27,29 @@ resource "aws_security_group" "sde_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
+  ingress {
+    description = "Airflow Webserver"
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+#   egress {
+#     from_port   = 8080
+#     to_port     = 8080
+#     protocol    = "tcp"
+#     cidr_blocks = ["0.0.0.0/0"]
+#     ipv6_cidr_blocks = ["::/0"]
+#   }
 
   tags = {
     Name = "sde_security_group"
@@ -53,9 +63,21 @@ resource "tls_private_key" "custom_key" {
 }
 
 resource "aws_key_pair" "generated_key" {
-  key_name_prefix = var.key_name
-  public_key      = tls_private_key.custom_key.public_key_openssh
-}
+  
+  # Name of key: Write the custom name of your key
+  key_name_prefix   = "aws_keys_pairs"
+  
+  # Public Key: The public will be generated using the reference of tls_private_key.terrafrom_generated_private_key
+  public_key = tls_private_key.custom_key.public_key_openssh
+ 
+  # Store private key :  Generate and save private key(aws_keys_pairs.pem) in current directory 
+  provisioner "local-exec" {   
+    command = <<-EOT
+      echo '${tls_private_key.custom_key.private_key_pem}' > aws_keys_pairs.pem
+      chmod 400 aws_keys_pairs.pem
+    EOT
+  }
+} 
 
 data "aws_ami" "ubuntu" {
   most_recent = true
@@ -103,7 +125,7 @@ sudo chmod 666 /var/run/docker.sock
 sudo apt install make
 echo 'Clone git repo to EC2'
 cd /home/ubuntu && git clone ${var.repo_url}
-echo 'CD to terraform_docker_project directory'
+echo 'CD to terraform_docker_project'
 cd terraform_docker_project
 echo 'Start containers & Run db migrations'
 make up

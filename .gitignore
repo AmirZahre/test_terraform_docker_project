@@ -6,3 +6,13 @@ __pycache__/
 # logs
 logs/*
 *.log
+
+*.pem
+
+###### TERRAFORM IGNORE
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
