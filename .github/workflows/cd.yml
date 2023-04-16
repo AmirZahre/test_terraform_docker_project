@@ -5,12 +5,6 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
-  pull-requests: write
-  actions: write
-  deployments: write
-
 jobs:
   deploy-to-ec2:
     runs-on: ubuntu-latest
@@ -25,3 +19,4 @@ jobs:
           REMOTE_USER: "ubuntu"
           SOURCE: "./"
           TARGET: "/home/ubuntu/terraform_docker_project"
+          EXCLUDE: "**/git/"
