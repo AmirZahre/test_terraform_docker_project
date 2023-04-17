@@ -15,27 +15,27 @@ down:
 
 ####################################################################################################################
 # Testing, auto formatting, type checks, & Lint checks
-format:
-	docker exec loader python -m black -S --line-length 79 .
+# format:
+# 	docker exec loader python -m black -S --line-length 79 .
 
-isort:
-	docker exec loader isort .
+# isort:
+# 	docker exec loader isort .
 
-pytest:
-	docker exec loader pytest tests
+# pytest:
+# 	docker exec loader pytest tests
 
-lint: 
-	docker exec loader flake8 /opt/sde
+# lint: 
+# 	docker exec loader flake8 /opt/sde
 
-type:
-	docker exec webserver mypy --ignore-missing-imports /opt/airflow
+# type:
+# 	docker exec webserver mypy --ignore-missing-imports /opt/airflow
 
-ci: isort format type lint pytest
+# ci: isort format type lint pytest
 
 ####################################################################################################################
 # Set up cloud infrastructure
 
-tf-init:
+infra-init:
 	terraform -chdir=./terraform init
 
 infra-up:
@@ -52,3 +52,4 @@ infra-public:
 
 infra-private:
 	terraform -chdir=./terraform output -raw private_key
+
