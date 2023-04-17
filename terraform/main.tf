@@ -46,7 +46,7 @@ resource "aws_security_group" "sde_security_group" {
   ingress {
     description = "Postgres"
     from_port   = 5439
-    to_port     = 5432
+    to_port     = 5439
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
