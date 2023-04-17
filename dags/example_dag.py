@@ -1,13 +1,14 @@
 from datetime import datetime, timedelta
 from textwrap import dedent
 
+# Operators; we need this to operate!
+from airflow.operators.bash import BashOperator
+
 # The DAG object; we'll need this to instantiate a DAG
 from airflow import DAG
 
-# Operators; we need this to operate!
-from airflow.operators.bash import BashOperator
 with DAG(
-    "tutorial_2_amir",
+    "tutorial_3_amir",
     # These args will get passed on to each operator
     # You can override them on a per-task basis during operator initialization
     default_args={
@@ -36,7 +37,6 @@ with DAG(
     catchup=False,
     tags=["example"],
 ) as dag:
-
     # t1, t2 and t3 are examples of tasks created by instantiating operators
     t1 = BashOperator(
         task_id="print_date_10",
@@ -50,7 +50,7 @@ with DAG(
         retries=3,
     )
     t1.doc_md = dedent(
-        """\
+        """
     #### Task Documentation
     You can document your task using the attributes `doc_md` (markdown),
     `doc` (plain text), `doc_rst`, `doc_json`, `doc_yaml` which gets
@@ -60,7 +60,9 @@ with DAG(
     """
     )
 
-    dag.doc_md = __doc__  # providing that you have a docstring at the beginning of the DAG; OR
+    dag.doc_md = (
+        __doc__  # providing that you have a docstring at the beginning of the DAG; OR
+    )
     dag.doc_md = """
     This is a documentation placed anywhere
     """  # otherwise, type it like this

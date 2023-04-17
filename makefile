@@ -15,22 +15,22 @@ down:
 
 ####################################################################################################################
 # Testing, auto formatting, type checks, & Lint checks
-# format:
-# 	docker exec loader python -m black -S --line-length 79 .
+format:
+	docker exec webserver python -m black -S --line-length 79 .
 
-# isort:
-# 	docker exec loader isort .
+isort:
+	docker exec webserver isort .
 
-# pytest:
-# 	docker exec loader pytest tests
+pytest:
+	docker exec webserver pytest /opt/airflow/tests
 
-# lint: 
-# 	docker exec loader flake8 /opt/sde
+lint: # omitted for now; experiencing issues with use in webserver container
+	docker exec webserver flake8 /opt/airflow
 
-# type:
-# 	docker exec webserver mypy --ignore-missing-imports /opt/airflow
+type:
+	docker exec webserver mypy --ignore-missing-imports /opt/airflow
 
-# ci: isort format type lint pytest
+ci: isort format type pytest
 
 ####################################################################################################################
 # Set up cloud infrastructure
@@ -47,9 +47,10 @@ infra-down:
 infra-config:
 	terraform -chdir=./terraform output
 
-infra-public:
+# for CD (github actions secret variables)
+infra-public: # REMOTE_HOST
 	terraform -chdir=./terraform output -raw ec2_public_dns
 
-infra-private:
+infra-private: # SERVER_SSH_KEY
 	terraform -chdir=./terraform output -raw private_key
 

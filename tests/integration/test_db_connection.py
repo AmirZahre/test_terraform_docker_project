@@ -1,5 +1,5 @@
-from src.utils.db import WarehouseConnection
-from src.utils.sde_config import get_warehouse_creds
+from dags.utils.db import WarehouseConnection
+from dags.utils.sde_config import get_warehouse_creds
 
 
 # test Postgres db connection
