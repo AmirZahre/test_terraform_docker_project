@@ -8,7 +8,7 @@ from airflow.operators.bash import BashOperator
 from airflow import DAG
 
 with DAG(
-    "tutorial_3_amir",
+    "tutorial_4_amir",
     # These args will get passed on to each operator
     # You can override them on a per-task basis during operator initialization
     default_args={
